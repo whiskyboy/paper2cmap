@@ -1,0 +1,6 @@
+langchain
+openai
+jinja2
+colorlog
+PyPDF2
+pdfminer.six

@@ -1,0 +1,10 @@
+[
+    {
+        "role": "user",
+        "content": "Text input: { Journal classification systems play an important role in bibliometric analyses. The two most important bibliographic databases, Web of Science and Scopus, each provide a journal classification system. However, no study has systematically investigated the accuracy of these classification systems. To examine and compare the accuracy of journal classification systems, we define two criteria on the basis of direct citation relations between journals and categories. } Existing CMap: { }"
+    },
+    {
+        "role": "assistant",
+        "content": "[{\"source\": \"journal classification system\", \"target\": \"bibliometric analyses\", \"relationship\": \"play an important role in\"}, {\"source\": \"Web of Science\", \"target\": \"journal classification system\", \"relationship\": \"provide\"}, {\"source\": \"Scopus\", \"target\": \"journal classification system\", \"relationship\": \"provide\"}, {\"source\": \"criteria\", \"target\": \"accuracy\", \"relationship\": \"examine and compare\"}, {\"source\": \"accuracy\", \"target\": \"journal classification system\", \"relationship\": \"of\"}]"
+    }
+]
