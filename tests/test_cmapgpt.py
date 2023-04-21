@@ -1,4 +1,3 @@
-import os
 import sys
 sys.path.insert(0, './')
 
@@ -6,15 +5,7 @@ from paper2cmap import CMapGPT, LLMManager
 
 
 if __name__ == "__main__":
-    OPENAI_MODEL_NAME = os.environ.get("OPENAI_MODEL_NAME", "")
-    OPENAI_MODEL_VERSION = os.environ.get("OPENAI_MODEL_VERSION", "")
-    
-    chatbot = LLMManager(
-        model_name=OPENAI_MODEL_NAME,
-        deployment_name=OPENAI_MODEL_NAME,
-        deployment_version=OPENAI_MODEL_VERSION,
-        temperature=0.2,
-        ).LLM
+    chatbot = LLMManager(temperature=0.2).LLM
     
     cmap_gpt = CMapGPT(chatbot=chatbot)
 

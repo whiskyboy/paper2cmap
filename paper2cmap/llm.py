@@ -12,6 +12,13 @@ class LLMManager():
                  deployment_version: str = "",
                  **kwargs
                  ) -> None:
+        """
+        Manage the Large Language Model.
+
+        :param model_name: The OpenAI model name. If not provided, it will be read from the environment variable OPENAI_MODEL_NAME.
+        :param deployment_name: The Azure deployment name. If not provided, it will be read from the environment variable OPENAI_MODEL_NAME.
+        :param deployment_version: The Azure deployment version. If not provided, it will be read from the environment variable OPENAI_MODEL_VERSION.
+        """
         # Required Env Vars
         OPENAI_API_TYPE = os.environ["OPENAI_API_TYPE"]
         OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
@@ -19,6 +26,16 @@ class LLMManager():
         # Required for Azure
         if OPENAI_API_TYPE == "azure":
             OPENAI_API_BASE = os.environ["OPENAI_API_BASE"]
+
+        # Optional Env Vars
+        if model_name == "":
+            model_name = os.environ.get("OPENAI_MODEL_NAME", "")
+        
+        if deployment_name == "":
+            deployment_name = os.environ.get("OPENAI_MODEL_NAME", "")
+
+        if deployment_version == "":
+            deployment_version = os.environ.get("OPENAI_MODEL_VERSION", "")
 
         if OPENAI_API_TYPE == "azure":
             logger.info(f"Using Azure deployment {deployment_name} (version {deployment_version})")

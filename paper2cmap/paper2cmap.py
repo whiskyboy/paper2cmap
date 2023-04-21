@@ -1,4 +1,3 @@
-import os
 from typing import Dict, List
 import colorlog
 
@@ -6,14 +5,10 @@ from paper2cmap import LLMManager, CMapGPT, PaperReader, logger
 
 
 class Paper2CMap():
-    # Optional Env Vars
-    OPENAI_MODEL_NAME = os.environ.get("OPENAI_MODEL_NAME", "")
-    OPENAI_MODEL_VERSION = os.environ.get("OPENAI_MODEL_VERSION", "")
-
     def __init__(self,
-                 model_name: str = OPENAI_MODEL_NAME,
-                 deployment_name: str = OPENAI_MODEL_NAME,
-                 deployment_version: str = OPENAI_MODEL_VERSION,
+                 model_name: str = "",
+                 deployment_name: str = "",
+                 deployment_version: str = "",
                  temperature: float = 0.7,
                  request_timeout: int = 60,
                  max_retries: int = 6,
@@ -32,7 +27,6 @@ class Paper2CMap():
         :param max_tokens: The maximum number of tokens.
         :param verbose: Whether to print debug logs.
         """
-        
         self.chatbot = LLMManager(
             model_name=model_name,
             deployment_name=deployment_name,
