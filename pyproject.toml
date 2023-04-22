@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "paper2cmap"
-version = "0.1.1"
+version = "0.1.2"
 description = "A package that automatically generates a concept map for a PDF document using LLM."
 readme = "README.md"
 authors = [{ name = "weitian", email = "weitian.bnu@gmail.com" }]
