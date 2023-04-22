@@ -110,6 +110,15 @@ with gr.Blocks(css=css) as demo:
         inputs=[state, max_num_concepts, max_num_links, max_num_sections],
         outputs=[state, concept_map],
     )
+
+    # Examples
+    gr.Examples(
+        examples=[
+            ["tests/examples/bert.pdf"],
+            ["tests/examples/attentionisallyouneed.pdf"],
+        ],
+        inputs=[paper_path],
+    )
         
 
 demo.launch()
