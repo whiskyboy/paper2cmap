@@ -11,3 +11,5 @@ Classes
 
     `load(self, paper_path: str) ‑> None`
     :   Load the paper and extract the catelogue and sections
+        
+        :param paper_path: The path of the paper

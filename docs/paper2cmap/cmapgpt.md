@@ -9,25 +9,18 @@ Classes
 
     ### Methods
 
-    `chat(self, text_input: str, cmap_input: List[Dict] = [], max_num_concepts: int = 10, max_num_relationships: int = 30) ‑> List[Dict]`
-    :   Chat with the model to generate a concept map.
+    `generate(self, text: str, max_num_concepts: int = 10, max_num_relationships: int = 30) ‑> List[Dict]`
+    :   Generate a concept map from the given text.
         
-        :param text_input: str, the text input to the model.
-        :param cmap_input: List[Dict], a json that represents the concept map input to the model.
+        :param text: str, the text input to the model.
         :param max_num_concepts: int, the maximum number of concepts to generate.
         :param max_num_relationships: int, the maximum number of relationships to generate.
-        :return: List[Dict], the generated concept map output.
+        :return: List[Dict], the generated concept map.
 
-    `create_cmap_prompt(self) ‑> langchain.prompts.chat.ChatPromptTemplate`
-    :   Create the concept map prompt.
+    `merge_and_prune(self, cmap: List[Dict], max_num_concepts: int = 10, max_num_relationships: int = 30) ‑> List[Dict]`
+    :   Merge and prune the given concept map.
         
-        :return: The concept map prompt.
-
-    `format_cmap_prompt(self, text_input: str, cmap_input: List[Dict], max_num_concepts: int = 10, max_num_relationships: int = 30) ‑> List[langchain.schema.BaseMessage]`
-    :   Format the concept map prompt.
-        
-        :param text_input: str, the text input to the model.
-        :param cmap_input: List[Dict], a json that represents the concept map input to the model.
+        :param cmap: List[Dict], the concept map to merge and prune.
         :param max_num_concepts: int, the maximum number of concepts to generate.
         :param max_num_relationships: int, the maximum number of relationships to generate.
-        :return: List[BaseMessage], the formatted concept map prompt.
+        :return: List[Dict], the merged and pruned concept map.

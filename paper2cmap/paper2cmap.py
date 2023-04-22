@@ -41,6 +41,8 @@ class Paper2CMap():
         self.paper_reader = PaperReader(chatbot=self.chatbot)
         self.cmap_gpt = CMapGPT(chatbot=self.chatbot)
 
+        self._loaded = False
+
         if verbose:
             logger.setLevel(colorlog.DEBUG)
 
@@ -52,6 +54,7 @@ class Paper2CMap():
         """
         logger.info(f"[Paper2CMap] Loading PDF file: {pdf_path}")
         self.paper_reader.load(pdf_path)
+        self._loaded = True
 
     def _generate_cmaps_by_section(self, max_num_concepts: int = 10, max_num_relationships: int = 30, 
                    max_num_iterations: int = -1) -> List[List[Dict]]:
@@ -104,6 +107,10 @@ class Paper2CMap():
         :param section_scale: The scale of the maximum number of concepts and relationships for each section. Default: 0.5.
         :return: A concept map.
         """
+        if not self._loaded:
+            logger.error(f"[Paper2CMap] Please load a PDF file first.")
+            raise Exception("Please load a PDF file first.")
+        
         logger.info(f"[Paper2CMap] Generating concept maps by section")
         cmap_list = self._generate_cmaps_by_section(int(max_num_concepts * section_scale), int(max_num_relationships * section_scale), max_num_iterations)
 
