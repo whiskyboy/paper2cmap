@@ -21,11 +21,11 @@ class PaperReader():
     def __init__(self, chatbot: ChatOpenAI | AzureChatOpenAI) -> None:
         self.chatbot = chatbot
 
-        self.title_max_len = 50
-        self.title_min_len = 5
+        self._title_max_len = 50
+        self._title_min_len = 5
 
         # Acknowledge to https://github.com/talkingwallace/ChatGPT-Paper-Reader for sharing the prompt
-        self.system_prompt_for_catelogue = """
+        self._catelogue_system_prompt = """
 You are a researcher helper bot. Now I will give several texts and you help me to find out which of them are the section titles of a research paper.
 You must return me in this json format:
 {
@@ -40,7 +40,7 @@ If the title has a number, the number MUST be retained!!!!
             for element in page_layout:
                 if isinstance(element, LTTextContainer):
                     title = element.get_text()
-                    if len(title) <= self.title_max_len and len(title) > self.title_min_len:
+                    if len(title) <= self._title_max_len and len(title) > self._title_min_len:
                         cand_cate.append(title)
 
         logger.debug(f"[PaperReader] Extracted candidate catelogue: {cand_cate}")
@@ -48,7 +48,7 @@ If the title has a number, the number MUST be retained!!!!
 
     def _extract_catelogue_with_LLM(self, cand_cate: List[str]) -> List[str]:
         messages = [
-            SystemMessage(content=self.system_prompt_for_catelogue),
+            SystemMessage(content=self._catelogue_system_prompt),
             HumanMessage(content=f"These are the texts: {cand_cate}")
         ]
         response = self.chatbot(messages).content
@@ -83,6 +83,8 @@ If the title has a number, the number MUST be retained!!!!
     def load(self, paper_path: str) -> None:
         """
         Load the paper and extract the catelogue and sections
+
+        :param paper_path: The path of the paper
         """
         self.paper = PdfReader(paper_path)
         self.full_text = ""

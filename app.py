@@ -116,6 +116,7 @@ with gr.Blocks(css=css) as demo:
         examples=[
             ["tests/examples/bert.pdf"],
             ["tests/examples/attentionisallyouneed.pdf"],
+            ["tests/examples/ashortsurvey.pdf"],
         ],
         inputs=[paper_path],
     )

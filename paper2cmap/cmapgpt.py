@@ -14,52 +14,65 @@ from langchain.prompts.chat import (
     AIMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-from langchain.schema import BaseMessage
 
 from paper2cmap import logger
 
 
 class CMapGPT():
     def __init__(self, chatbot: ChatOpenAI | AzureChatOpenAI) -> None:
-        self.prompt_config = yaml.load(
+        self._prompt_config = yaml.load(
             open(pkg_resources.resource_filename('paper2cmap', 'metas/prompts.yaml'), "r"),
             Loader=yaml.FullLoader
             )
-        self.system_prompt = self.prompt_config["system_prompt"]
-        self.user_prompt = self.prompt_config["user_prompt"]
+        self._generate_system_prompt = self._prompt_config["generate"]["system"]
+        self._generate_user_prompt = self._prompt_config["generate"]["user"]
+        self._merge_and_prune_system_prompt = self._prompt_config["merge_and_prune"]["system"]
+        self._merge_and_prune_user_prompt = self._prompt_config["merge_and_prune"]["user"]
 
-        self.examples = json.load(
-            open(pkg_resources.resource_filename('paper2cmap', 'metas/examples.json'), "r")
+        self._generate_examples = json.load(
+            open(pkg_resources.resource_filename('paper2cmap', 'metas/generate_examples.json'), "r")
+            )
+        self._merge_and_prune_examples = json.load(
+            open(pkg_resources.resource_filename('paper2cmap', 'metas/merge_and_prune_examples.json'), "r")
             )
 
-        self.cmap_prompt = self.create_cmap_prompt()
+        self.generate_prompt = self._create_prompt(
+            system_prompt=self._generate_system_prompt,
+            user_prompt=self._generate_user_prompt,
+            user_prompt_vars=["text", "max_num_concepts", "max_num_relationships"],
+            examples=self._generate_examples
+        )
+        self.merge_and_prune_prompt = self._create_prompt(
+            system_prompt=self._merge_and_prune_system_prompt,
+            user_prompt=self._merge_and_prune_user_prompt,
+            user_prompt_vars=["cmap", "max_num_concepts", "max_num_relationships"],
+            examples=self._merge_and_prune_examples
+        )
         
         self.chatbot = chatbot
 
-    def create_cmap_prompt(self) -> ChatPromptTemplate:
-        """
-        Create the concept map prompt.
-
-        :return: The concept map prompt.
-        """
+    def _create_prompt(self, 
+                       system_prompt: str = "", system_prompt_vars: List[str] = [],
+                       user_prompt: str = "", user_prompt_vars: List[str] = [], 
+                       examples: List[Dict] = []) -> ChatPromptTemplate:
         system_message_prompt = SystemMessagePromptTemplate(
             prompt=PromptTemplate(
-                template=self.system_prompt,
-                input_variables=[],
+                template=system_prompt,
+                input_variables=system_prompt_vars,
                 template_format="jinja2"
             )
         )
 
         human_message_prompt = HumanMessagePromptTemplate(
             prompt=PromptTemplate(
-                template=self.user_prompt,
-                input_variables=["text_input", "cmap_input", "max_num_concepts", "max_num_relationships"],
+                template=user_prompt,
+                input_variables=user_prompt_vars,
                 template_format="jinja2"
             )
         )
 
         examples_message_prompts = []
-        for example in self.examples:
+        for example in examples:
             role_message_prompt_template = AIMessagePromptTemplate if example["role"] == "assistant" else HumanMessagePromptTemplate
             examples_message_prompts.append(
                 role_message_prompt_template(
@@ -73,37 +86,40 @@ class CMapGPT():
 
         return ChatPromptTemplate.from_messages([system_message_prompt, *examples_message_prompts, human_message_prompt])
 
-    def format_cmap_prompt(self, text_input: str, cmap_input: List[Dict], 
-                           max_num_concepts: int = 10, max_num_relationships: int = 30) -> List[BaseMessage]:
+    def generate(self, text: str, max_num_concepts: int = 10, max_num_relationships: int = 30) -> List[Dict]:
         """
-        Format the concept map prompt.
+        Generate a concept map from the given text.
 
-        :param text_input: str, the text input to the model.
-        :param cmap_input: List[Dict], a json that represents the concept map input to the model.
+        :param text: str, the text input to the model.
         :param max_num_concepts: int, the maximum number of concepts to generate.
         :param max_num_relationships: int, the maximum number of relationships to generate.
-        :return: List[BaseMessage], the formatted concept map prompt.
+        :return: List[Dict], the generated concept map.
         """
-        return self.cmap_prompt.format_prompt(
-            text_input=text_input,
-            cmap_input=cmap_input,
+        inputs = self.generate_prompt.format_prompt(
+            text=text,
             max_num_concepts=max_num_concepts,
             max_num_relationships=max_num_relationships
-        ).to_messages()
+        )
+        logger.debug(f"[CMapGPT] Prompt: {inputs.to_string()}")
+        response = self.chatbot(inputs.to_messages()).content
+        logger.debug(f"[CMapGPT] Result: {response}")
+        return json.loads(response)
 
-    def chat(self, text_input: str, cmap_input: List[Dict] = [],
-             max_num_concepts: int = 10, max_num_relationships: int = 30) -> List[Dict]:
+    def merge_and_prune(self, cmap: List[Dict], max_num_concepts: int = 10, max_num_relationships: int = 30) -> List[Dict]:
         """
-        Chat with the model to generate a concept map.
+        Merge and prune the given concept map.
 
-        :param text_input: str, the text input to the model.
-        :param cmap_input: List[Dict], a json that represents the concept map input to the model.
+        :param cmap: List[Dict], the concept map to merge and prune.
         :param max_num_concepts: int, the maximum number of concepts to generate.
         :param max_num_relationships: int, the maximum number of relationships to generate.
-        :return: List[Dict], the generated concept map output.
+        :return: List[Dict], the merged and pruned concept map.
         """
-        inputs = self.format_cmap_prompt(text_input, cmap_input, max_num_concepts, max_num_relationships)
-        logger.debug(f"[CMapGPT] Prompt: {inputs}")
-        response = self.chatbot(inputs).content
+        inputs = self.merge_and_prune_prompt.format_prompt(
+            cmap=cmap,
+            max_num_concepts=max_num_concepts,
+            max_num_relationships=max_num_relationships
+        )
+        logger.debug(f"[CMapGPT] Prompt: {inputs.to_string()}")
+        response = self.chatbot(inputs.to_messages()).content
         logger.debug(f"[CMapGPT] Result: {response}")
         return json.loads(response)

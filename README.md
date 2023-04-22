@@ -21,7 +21,9 @@ A package that automatically generates a concept map for a PDF document using LL
 
 ### What is Paper2CMap?
 
-Paper2CMap is a package that automatically generates a concept map for a PDF document using LLM. It will first extract the text from the PDF document, then cut the text into sections, and finally generate concept map based on the sections. Currently the generated concept map is in JSON format:
+Paper2CMap is a package that automatically generates a concept map for a PDF document using LLM. It will first cut the text of the PDF document into sections, then generate concept maps for each section, and finally merge and prune these concept maps to generate a final map for the whole document.
+
+Currently the generated concept map is in JSON format:
 ```JSON
 [{"source": "source concept", "target": "target concept", "relationship": "relationship between source and target"}]
 ```

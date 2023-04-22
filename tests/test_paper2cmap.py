@@ -2,14 +2,12 @@ import os
 import sys
 sys.path.insert(0, './')
 
-from paper2cmap import Paper2CMap
+from paper2cmap import Paper2CMap, logger
 
+logger.setLevel("DEBUG")
 
 if __name__ == "__main__":
-    paper2camp = Paper2CMap(
-        temperature=0.7,
-        verbose=False,
-    )
+    paper2camp = Paper2CMap()
 
     demo_pdf = "./tests/examples/attentionisallyouneed.pdf"
     paper2camp.load(demo_pdf)

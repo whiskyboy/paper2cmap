@@ -1,11 +1,12 @@
 import sys
 sys.path.insert(0, './')
 
-from paper2cmap import PaperReader, LLMManager
+from paper2cmap import PaperReader, LLMManager, logger
 
+logger.setLevel("DEBUG")
 
 if __name__ == "__main__":
-    chatbot = LLMManager(temperature=0.2).LLM
+    chatbot = LLMManager().LLM
 
     paper_reader = PaperReader(chatbot=chatbot)
     

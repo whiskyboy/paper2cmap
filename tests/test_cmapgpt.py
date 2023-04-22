@@ -1,11 +1,12 @@
 import sys
 sys.path.insert(0, './')
 
-from paper2cmap import CMapGPT, LLMManager
+from paper2cmap import CMapGPT, LLMManager, logger
 
+logger.setLevel("DEBUG")
 
 if __name__ == "__main__":
-    chatbot = LLMManager(temperature=0.2).LLM
+    chatbot = LLMManager().LLM
     
     cmap_gpt = CMapGPT(chatbot=chatbot)
 
@@ -18,7 +19,9 @@ if __name__ == "__main__":
     Alternatively, an LLM may use a bidirectional transformer (as in the example of BERT), which assigns a probability distribution over words given access to both preceding and following context.
     In addition to the task of predicting the next word or "filling in the blanks", LLMs may be trained on auxiliary tasks which test their understanding of the data distribution, such as Next Sentence Prediction (NSP), in which pairs of sentences are presented and the model must predict whether they appear side-by-side in the training corpus.
     """
-    cmap_input = []
 
-    print(cmap_gpt.chat(text_input, cmap_input,
-                        max_num_concepts=5, max_num_relationships=10))
+    cmap = cmap_gpt.generate(text_input, max_num_concepts=5, max_num_relationships=10)
+    print(f"Generated concept map: {cmap}")
+
+    cmap = cmap_gpt.merge_and_prune(cmap, max_num_concepts=5, max_num_relationships=10)
+    print(f"Merged and pruned concept map: {cmap}")
