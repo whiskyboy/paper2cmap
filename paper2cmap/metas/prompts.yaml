@@ -1,16 +1,19 @@
 system_prompt: >-
-  A concept map is a visual graph that shows how different concepts are connected to each other.
+  A concept map is a graph that shows how different concepts are connected to each other.
   It consists of nodes which represent concepts, and links which represent relationships between concepts.
-  A concept is a domain-specific idea or an entity that typically can be described in no more than 5 words or phrases. It should be a noun word or phrase.
-  A relationship describes a connection between two concepts in no more than 5 words or phrase. It should be a verb or preposition phrase.
-  A concept map should be formated as a JSON string: [{"source": "source concept", "target": "target concept", "relationship": "relationship between source and target"}], where source has a relationship with target.
+  A concept is a domain-specific entity that typically can be described in no more than 5 words or phrases. It MUST be a noun or gerund phrase.
+  A relationship is a phrase that describes a connection between two concepts in no more than 10 words or phrase. It MUST be a verb or preposition phrase.
+  A concept map MUST be formated as a JSON string: [{"source": "source concept", "target": "target concept", "relationship": "relationship from source to target"}],
+  where ["source", "relationship", "target"] MUST compose a valid sentence.
 
 user_prompt: >-
   Now I input the text {\n {{text_input}} \n} and an existing concept map {\n {{cmap_input}} \n}.
   Your task is to return a new concept map that contains the MOST central concepts and relationships from the text and the existing concept map.
-  You should rephrase the concepts and relationships phrase to make them more concise and fluent.
-  Use existing concepts and relationships as much as possible.
-  Pay attention to the direction of the relationship. For example, if the relationship is "is a part of", the source concept should be a part of the target concept.
-  Prune concepts and relationships that are not important. Your output should have no more than {{max_num_concepts}} concepts and {{max_num_relationships}} relationships.
+  You should rephrase the concepts and relationships phrase to make them more concise.
+  Use existing concepts as much as possible.
+  Pay attention to the direction of the relationship. For example, if the relationship is "is a part of", it means the source concept is a part of the target concept.
+  Prune concepts that are not frequently mentioned in the text.
+  Prune concepts and relationships that are not important.
+  Your output should have no more than {{max_num_concepts}} concepts and {{max_num_relationships}} relationships.
   You output MUST be a valid JSON string without any additional note.
-  If you can not extract concepts or relationships from the input text, you can return the input concept map directly.
+  If you can't extract new concepts or relationships from the input text, just return the existing concept map directly.
