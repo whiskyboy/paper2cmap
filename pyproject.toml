@@ -1,0 +1,31 @@
+# pyproject.toml
+
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paper2cmap"
+version = "0.1.0"
+description = "A package that automatically generates a concept map for a PDF document using LLM."
+readme = "README.md"
+authors = [{ name = "weitian", email = "weitian.bnu@gmail.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["concept map", "cmap", "paper", "pdf", "chatgpt", "gpt", "llm"]
+dependencies = [
+    "langchain",
+    "openai",
+    "jinja2",
+    "colorlog",
+    "PyPDF2",
+    "pdfminer.six",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/whiskyboy/paper2cmap"
