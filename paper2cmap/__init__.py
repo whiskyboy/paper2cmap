@@ -4,4 +4,4 @@ from .cmapgpt import CMapGPT
 from .paper_reader import PaperReader
 from .paper2cmap import Paper2CMap
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
