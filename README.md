@@ -63,7 +63,7 @@ paper2cmap.load("path/to/paper.pdf")
 paper2cmap.generate_cmap()
 ```
 
-For more details of the API, please refer to [API Reference](docs/api.md).
+For more details of the API, please refer to [API Reference](docs/paper2cmap/paper2cmap.md).
 
 ### Gradio App
 
