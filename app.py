@@ -4,11 +4,11 @@ import gradio as gr
 from paper2cmap import Paper2CMap
 
 
-def set_key(openai_api_key):
+def set_key(openai_api_key, model_name):
     os.environ["OPENAI_API_TYPE"] = "openai"
     os.environ["OPENAI_API_KEY"] = openai_api_key
-    os.environ["OPENAI_MODEL_NAME"] = "gpt-3.5-turbo"
-    return openai_api_key
+    os.environ["OPENAI_MODEL_NAME"] = model_name
+    return openai_api_key, model_name
 
     
 def load_text(state, paper_path, temperature, max_num_sections):
@@ -43,14 +43,21 @@ with gr.Blocks(css=css) as demo:
 
     # Set Key
     with gr.Row():
-        with gr.Column(scale=0.85):
+        with gr.Column(scale=0.25):
+            model_name = gr.Dropdown(
+                show_label=False,
+                choices=["gpt-3.5-turbo", "gpt-4"],
+                value="gpt-3.5-turbo",
+                interactive=True,
+            ).style(container=False)
+        with gr.Column(scale=0.65):
             openai_api_key = gr.Textbox(
                 show_label=False,
                 placeholder="Set your OpenAI API key here and press Enter",
                 lines=1,
                 type="password"
             ).style(container=False)
-        with gr.Column(scale=0.15, min_width=0):
+        with gr.Column(scale=0.1, min_width=0):
             set_key_btn = gr.Button("Submit")
 
     # Inputs
@@ -98,8 +105,8 @@ with gr.Blocks(css=css) as demo:
             concept_map = gr.JSON(label="Concept Map")
 
     # Event Handlers
-    openai_api_key.submit(set_key, [openai_api_key], [openai_api_key])
-    set_key_btn.click(set_key, [openai_api_key], [openai_api_key])
+    openai_api_key.submit(set_key, [openai_api_key, model_name], [openai_api_key, model_name])
+    set_key_btn.click(set_key, [openai_api_key, model_name], [openai_api_key, model_name])
 
     generate_btn.click(
         fn=load_text,
