@@ -5,6 +5,6 @@
     },
     {
         "role": "assistant",
-        "content": "[{\"source\": \"journal classification system\", \"target\": \"bibliometric analyses\", \"relationship\": \"play an important role in\"}, {\"source\": \"Web of Science\", \"target\": \"journal classification system\", \"relationship\": \"provide\"}, {\"source\": \"Scopus\", \"target\": \"journal classification system\", \"relationship\": \"provide\"}, {\"source\": \"criteria\", \"target\": \"accuracy\", \"relationship\": \"examine and compare\"}, {\"source\": \"accuracy\", \"target\": \"journal classification system\", \"relationship\": \"of\"}]"
+        "content": "[[\"journal classification system\", \"play an important role in\", \"bibliometric analyses\"], [\"Web of Science\", \"provide\", \"journal classification system\"], [\"Scopus\", \"provide\", \"journal classification system\"], [\"criteria\", \"examine and compare\", \"accuracy\"], [\"accuracy\", \"of\", \"journal classification system\"]]"
     }
 ]

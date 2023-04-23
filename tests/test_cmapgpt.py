@@ -20,6 +20,9 @@ if __name__ == "__main__":
     In addition to the task of predicting the next word or "filling in the blanks", LLMs may be trained on auxiliary tasks which test their understanding of the data distribution, such as Next Sentence Prediction (NSP), in which pairs of sentences are presented and the model must predict whether they appear side-by-side in the training corpus.
     """
 
+    text_input = cmap_gpt.preprocess(text_input)
+    print(f"Preprocessed text: {text_input}")
+
     cmap = cmap_gpt.generate(text_input, max_num_concepts=5, max_num_relationships=10)
     print(f"Generated concept map: {cmap}")
 

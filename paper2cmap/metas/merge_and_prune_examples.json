@@ -1,3 +1,10 @@
 [
-    
+    {
+        "role": "user",
+        "content": "[[\"journal classification system\", \"play an important role in\", \"bibliometric analyses\"], [\"Web of Science\", \"provide\", \"journal classification system\"], [\"Scopus\", \"provide\", \"journal classification system\"], [\"criteria\", \"examine and compare\", \"accuracy\"], [\"accuracy\", \"of\", \"journal classification system\"]]"
+    },
+    {
+        "role": "assistant",
+        "content": "[[\"journal classification system\", \"play an important role in\", \"bibliometric analyses\"], [\"criteria\", \"examine and compare\", \"accuracy\"], [\"accuracy\", \"of\", \"journal classification system\"]]"
+    }
 ]

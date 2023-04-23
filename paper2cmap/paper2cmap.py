@@ -73,9 +73,12 @@ class Paper2CMap():
             if max_num_iterations != -1 and i >= max_num_iterations:
                 break
 
+            logger.info(f"[Paper2CMap] Preprocessing section {i}")
+            text = self.cmap_gpt.preprocess(section)
+
             logger.info(f"[Paper2CMap] Generating concept map for section {i}")
             cmap = self.cmap_gpt.generate(
-                text=section,
+                text=text,
                 max_num_concepts=max_num_concepts,
                 max_num_relationships=max_num_relationships
                 )
